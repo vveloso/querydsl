@@ -52,7 +52,7 @@ public final class Normalization {
                     case 3: result = first.subtract(second); break;
                     default: throw new IllegalStateException();
                 }
-                StringBuffer buffer = new StringBuffer();
+                StringBuffer buffer = new StringBuffer(queryString.length());
                 matcher.appendReplacement(buffer, result.stripTrailingZeros().toPlainString())
                         .appendTail(buffer);
                 queryString = buffer.toString();
@@ -66,7 +66,7 @@ public final class Normalization {
             return queryString;
         }
 
-        StringBuffer buffer = new StringBuffer();
+        StringBuffer buffer = new StringBuffer(queryString.length());
         Matcher m = FULL_OPERATION.matcher(queryString);
         while (m.find()) {
             String result = normalizeOperation(queryString.substring(m.start(), m.end()));

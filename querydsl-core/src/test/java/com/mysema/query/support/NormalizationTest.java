@@ -21,6 +21,19 @@ public class NormalizationTest {
     }
 
     @Test
+    public void Performance_Substring() throws Exception {
+        Runner.run("NormalizationTest Performance_Substring", new Benchmark() {
+
+            @Override
+            public void run(int times) throws Exception {
+                for (int i = 0; i < times; i++) {
+                    Normalization.normalize("substring(cat.name,0+1,locate(?1,cat.name)-1-0)");
+                }
+            }
+        });
+    }
+
+    @Test
     public void Variables() {
         assertEquals("var1 + 3", Normalization.normalize("var1 + 3"));
     }

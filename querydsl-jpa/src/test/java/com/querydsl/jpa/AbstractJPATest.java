@@ -347,7 +347,7 @@ public abstract class AbstractJPATest {
     public void Case5() {
         assertEquals(ImmutableList.of(0, 1, 1, 1),
                 query().from(cat).orderBy(cat.id.asc())
-                       .select(cat.mate.when(savedCats.get(0)).then(0).otherwise(1)).fetch());
+                        .select(cat.mate.when(savedCats.get(0)).then(0).otherwise(1)).fetch());
     }
 
     @Test
@@ -551,7 +551,7 @@ public abstract class AbstractJPATest {
         assertEquals(2,      query().from(cat).select(cat.birthdate.dayOfMonth()).fetchFirst().intValue());
         assertEquals(3,      query().from(cat).select(cat.birthdate.hour()).fetchFirst().intValue());
         assertEquals(4,      query().from(cat).select(cat.birthdate.minute()).fetchFirst().intValue());
-        assertEquals(0,      query().from(cat).select(cat.birthdate.second()).fetchFirst().intValue());
+        assertEquals(0, query().from(cat).select(cat.birthdate.second()).fetchFirst().intValue());
     }
 
     @Test
@@ -577,8 +577,8 @@ public abstract class AbstractJPATest {
 
         assertEquals(Arrays.asList(),
                 query().from(entity, entity2)
-                .where(entity.iint.divide(entity2.iint).loe(2))
-                .select(entity).fetch());
+                        .where(entity.iint.divide(entity2.iint).loe(2))
+                        .select(entity).fetch());
     }
 
     @Test
@@ -757,6 +757,15 @@ public abstract class AbstractJPATest {
         assertEquals(1, ids.size());
         assertEquals(1, results.getResults().size());
         assertEquals(1, results.getTotal());
+    }
+
+    @Test
+    @NoHibernate // https://hibernate.atlassian.net/browse/HHH-1902
+    public void GroupBy_Select() {
+        // select length(my_column) as column_size from my_table group by column_size
+        NumberPath<Integer> length = Expressions.numberPath(Integer.class, "len");
+        assertEquals(ImmutableList.of(4, 6, 7, 8),
+                query().select(cat.name.length().as(length)).from(cat).groupBy(length).fetch());
     }
 
     @Test
@@ -1136,16 +1145,16 @@ public abstract class AbstractJPATest {
     @NoBatooJPA
     public void Order_NullsFirst() {
         assertNull(query().from(cat)
-            .orderBy(cat.dateField.asc().nullsFirst())
-            .select(cat.dateField).fetchFirst());
+                .orderBy(cat.dateField.asc().nullsFirst())
+                .select(cat.dateField).fetchFirst());
     }
 
     @Test
     @NoBatooJPA
     public void Order_NullsLast() {
         assertNotNull(query().from(cat)
-            .orderBy(cat.dateField.asc().nullsLast())
-            .select(cat.dateField).fetchFirst());
+                .orderBy(cat.dateField.asc().nullsLast())
+                .select(cat.dateField).fetchFirst());
     }
 
     @Test
@@ -1596,7 +1605,7 @@ public abstract class AbstractJPATest {
     @Test
     @NoOpenJPA
     public void Type_Order() {
-        assertEquals(Arrays.asList(10,1,2,3,4,5,6),
+        assertEquals(Arrays.asList(10, 1, 2, 3, 4, 5, 6),
                 query().from(animal).orderBy(JPAExpressions.type(animal).asc(), animal.id.asc())
                         .select(animal.id).fetch());
     }
